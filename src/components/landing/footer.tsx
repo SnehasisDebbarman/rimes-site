@@ -2,8 +2,8 @@
 import React from "react";
 import { Linkedin, Youtube } from "lucide-react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, useAnimation } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import logo from "@/assets/Images/logo.svg";
 
 interface FooterColumn {
@@ -46,8 +46,65 @@ const footerColumns: FooterColumn[] = [
 ];
 
 const RimesFooter: React.FC = () => {
-  const footerRef = useRef(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [footerDimensions, setFooterDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const isInView = useInView(footerRef, { once: true, amount: 0.2 });
+  const ballControls = useAnimation();
+
+  // Define these constants at the component level
+
+  const ballRadius = 2; // Half of the ball's height (4px)
+  const bounceTop = 0; // Top of the logo
+  const bounceBottom = -30; // Increased bounce height (adjust as needed)
+  const xOffset = -40; // Leftward shift
+  const wordPositions = [260, 220, 180, 140, 100].map((x) => x + xOffset); // Adjust these x-positions for each word, from right to left
+
+  useEffect(() => {
+    if (footerRef.current) {
+      const { width, height } = footerRef.current.getBoundingClientRect();
+      setFooterDimensions({ width, height });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isInView && footerDimensions.width > 0) {
+      ballControls
+        .start({
+          x: [
+            footerDimensions.width,
+            footerDimensions.height - ballRadius,
+            ...wordPositions.flatMap((x) => [x, x]),
+            wordPositions[wordPositions.length - 1],
+          ],
+          y: [
+            bounceTop,
+            footerDimensions.height - ballRadius - 100,
+            ...wordPositions.flatMap(() => [bounceBottom, bounceTop]),
+            0,
+          ],
+          transition: {
+            duration: 7,
+            times: [
+              0,
+              0.5,
+              0.8,
+              ...wordPositions.flatMap((_, i) => [
+                0.8 + i * 0.1,
+                0.9 + i * 0.1,
+              ]),
+              1,
+            ],
+            ease: "easeInOut",
+          },
+        })
+        .then(() => {
+          ballControls.start({ opacity: 0, transition: { duration: 0 } });
+        });
+    }
+  }, [isInView, ballControls, footerDimensions]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,8 +132,14 @@ const RimesFooter: React.FC = () => {
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={containerVariants}
-      className="bg-white text-green-900 py-8"
+      className="bg-white text-green-900 py-8 relative overflow-hidden"
     >
+      <motion.div
+        className="absolute w-4 h-4 bg-[#F7942B] rounded-full z-10"
+        initial={{ x: footerDimensions.width, y: bounceTop, opacity: 1 }}
+        animate={ballControls}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-8 gap-5 justify-between">
           <motion.div

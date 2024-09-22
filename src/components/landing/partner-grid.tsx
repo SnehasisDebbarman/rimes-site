@@ -1,102 +1,82 @@
 "use client";
-import { Undo2 } from "lucide-react";
-import React, { useState } from "react";
-import dell from "@/assets/svgs/partner/dell.svg";
-import zoom from "@/assets/svgs/partner/zoom.svg";
-import asana from "@/assets/svgs/partner/asana.svg";
+import React from "react";
 import Image from "next/image";
 
-interface Partner {
-  name: string;
-  logo: string;
+import { motion } from "framer-motion";
+import img1 from "@/assets/Images/05-01.jpg";
+import img2 from "@/assets/Images/06-01.jpg";
+import img3 from "@/assets/Images/07-01.jpg";
+import { ArrowRightIcon } from "lucide-react";
+
+interface PartnerCard {
+  title: string;
   description: string;
+  imageUrl: string;
 }
 
-const partners: Partner[] = [
+const partnerCards: PartnerCard[] = [
   {
-    name: "Dell",
-    logo: dell,
+    title: "Data Partners",
     description:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.",
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.",
+    imageUrl: img1.src,
   },
   {
-    name: "Zoom",
-    logo: zoom,
+    title: "Industry Partners",
     description:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.",
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.",
+    imageUrl: img2.src,
   },
   {
-    name: "Asana",
-    logo: asana,
+    title: "Technology Partners",
     description:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.",
-  },
-  {
-    name: "Partner 4",
-    logo: dell,
-    description:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.",
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.",
+    imageUrl: img3.src,
   },
 ];
 
-const PartnerBox: React.FC<{ partner: Partner }> = ({ partner }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  return (
-    <div
-      className="h-48 w-full perspective"
-      onClick={() => setIsFlipped(!isFlipped)}
-    >
-      <div
-        className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
-          isFlipped ? "rotate-y-180" : ""
-        }`}
-      >
-        <div className="absolute w-full h-full backface-hidden bg-[#85C7AD66] p-6 rounded-lg flex justify-center items-center">
-          <div className="text-4xl font-bold text-gray-800 ">
-            <Image src={partner.logo} alt={partner.name} />
-          </div>
-          <button className="absolute -bottom-2 -right-2 w-6 h-6 bg-[#277365] text-white rounded-full flex items-center justify-center">
-            <Undo2 className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="absolute w-full h-full backface-hidden bg-[#85C7AD] p-6 rounded-lg flex flex-col justify-between rotate-y-180">
-          <p className="text-sm text-gray-700">{partner.description}</p>
-          <a
-            href="#"
-            className="text-[#143A33] hover:underline mt-2 inline-block"
-          >
-            Read More &gt;
-          </a>
-          <button className="absolute -bottom-2 -right-2 w-6 h-6 bg-[#277365] text-white rounded-full flex items-center justify-center">
-            ×
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const H2ExplorePartners: React.FC = () => {
   return (
-    <div className="p-8 bg-white">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold text-center mb-2 text-[#143A33]">
         H2 Explore Partners
-      </h2>
-      <p className="text-center text-gray-600 mb-8">
+      </h1>
+      <p className="text-center mb-8 text-[#143A33]">
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
         eirmod tempor invidunt ut lare et dolore
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {partners.map((partner) => (
-          <PartnerBox key={partner.name} partner={partner} />
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-        {partners.map((partner) => (
-          <PartnerBox key={partner.name} partner={partner} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {partnerCards.map((card, index) => (
+          <motion.div
+            key={index}
+            className="bg-white rounded-lg shadow-md overflow-hidden"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.2 }}
+          >
+            <Image
+              src={card.imageUrl}
+              alt={card.title}
+              width={400}
+              height={300}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-2 text-emerald-950">
+                {card.title}
+              </h2>
+              <p className="text-gray-600 mb-4">{card.description}</p>
+              <motion.button
+                className=" text-emerald-800 py-2 rounded flex gap-2 items-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="font-bold text-[#143A33]"> Learn More</div>
+                <ArrowRightIcon className="w-6 h-6 p-1 bg-orange-500 text-black font-bold ml-2 rounded-full" />
+              </motion.button>
+            </div>
+          </motion.div>
         ))}
       </div>
     </div>
