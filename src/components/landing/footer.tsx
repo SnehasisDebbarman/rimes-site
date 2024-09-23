@@ -4,7 +4,7 @@ import { Linkedin, Youtube } from "lucide-react";
 import Image from "next/image";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import logo from "@/assets/Images/logo.svg";
+import logo from "@/assets/Images/dot-less-logo.svg";
 
 interface FooterColumn {
   title: string;
@@ -91,7 +91,7 @@ const RimesFooter: React.FC = () => {
             0,
           ],
           transition: {
-            duration: 7,
+            duration: 3.1,
             times: [
               0,
               0.5,
@@ -106,7 +106,7 @@ const RimesFooter: React.FC = () => {
           },
         })
         .then(() => {
-          ballControls.start({ opacity: 0, transition: { duration: 0 } });
+          // ballControls.start({ opacity: 0, transition: { duration: 0 } });
         });
     }
   }, [isInView, ballControls, footerDimensions]);
@@ -152,7 +152,13 @@ const RimesFooter: React.FC = () => {
             className="w-full md:w-auto mb-8 md:mb-0 col-span-2 flex flex-col gap-4"
           >
             <div className="h-32 ">
-              <Image src={logo} width={200} height={80} alt="Rimes" />
+              <Image
+                src={logo}
+                width={200}
+                height={80}
+                alt="Rimes"
+                className="pt-3 -ml-[0.65rem]"
+              />
             </div>
             <div className="text-sm text-slate-600">
               ©2024 Rimes Technology Corporation. All Rights Reserved.
