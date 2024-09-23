@@ -60,7 +60,7 @@ const RimesFooter: React.FC = () => {
   const bounceTop = 0; // Top of the logo
   const bounceBottom = -30; // Increased bounce height (adjust as needed)
   const xOffset = -40; // Leftward shift
-  const wordPositions = [260, 220, 180, 140, 100].map((x) => x + xOffset); // Adjust these x-positions for each word, from right to left
+  const wordPositions = [260, 180, 100].map((x) => x + xOffset); // Adjust these x-positions for each word, from right to left
 
   useEffect(() => {
     if (footerRef.current) {
@@ -76,13 +76,18 @@ const RimesFooter: React.FC = () => {
           x: [
             footerDimensions.width,
             footerDimensions.height - ballRadius,
+
             ...wordPositions.flatMap((x) => [x, x]),
             wordPositions[wordPositions.length - 1],
           ],
           y: [
             bounceTop,
             footerDimensions.height - ballRadius - 100,
-            ...wordPositions.flatMap(() => [bounceBottom, bounceTop]),
+
+            ...wordPositions.flatMap((i) => [
+              bounceBottom + i * 0.01,
+              bounceTop + i * 0.01,
+            ]),
             0,
           ],
           transition: {
@@ -92,8 +97,8 @@ const RimesFooter: React.FC = () => {
               0.5,
               0.8,
               ...wordPositions.flatMap((_, i) => [
-                0.8 + i * 0.1,
-                0.9 + i * 0.1,
+                i / wordPositions.length,
+                (i + 0.5) / wordPositions.length,
               ]),
               1,
             ],

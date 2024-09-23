@@ -31,7 +31,14 @@ const SolutionCard = ({ image, text }: { image: string; text: string }) => (
 
 const TabbedSolutions = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = ["Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum"];
+  const tabs = [
+    "Data Partners",
+    "Benchmarks  & Index Solutions",
+    "Enterprise Data Management",
+    "Data Distribution and Warehousing Solutions",
+    "Investment Management Solutions",
+    "Asset Servicing Solutions",
+  ];
   const solutions = [
     {
       image: one_one,
